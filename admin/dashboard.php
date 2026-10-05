@@ -232,14 +232,14 @@ if ($total_semua == 0) {
 
 // LIST OBAT YANG DIKELUARKAN
 $query_obat_keluar = $conn->query("
-SELECT o.nama_obat, COUNT(*) as jumlah
+SELECT o.nama_obat, SUM(COALESCE(po.jumlah, 1)) as jumlah
 FROM pemeriksaan_obat po
 JOIN pemeriksaan_klinis p ON po.id_pemeriksaan = p.id_pemeriksaan
 JOIN kunjungan k ON p.id_kunjungan = k.id_kunjungan
 JOIN obat o ON po.id_obat = o.id_obat
 WHERE MONTH(k.tanggal_kunjungan) = '$filter_bulan'
 AND YEAR(k.tanggal_kunjungan) = '$filter_tahun'
-GROUP BY o.nama_obat
+GROUP BY o.id_obat, o.nama_obat
 ORDER BY jumlah DESC
 ");
 

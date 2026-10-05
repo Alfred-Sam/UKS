@@ -33,7 +33,11 @@ SELECT
     kr.nama,
     kr.jenis_kelamin,
     p.jenis_penyakit,
-    GROUP_CONCAT(o.nama_obat SEPARATOR ', ') as nama_obat,
+    GROUP_CONCAT(
+        IF(po.jumlah > 1, CONCAT(o.nama_obat, ' (', po.jumlah, ')'), o.nama_obat)
+        ORDER BY po.id ASC
+        SEPARATOR ', '
+    ) as nama_obat,
     p.status_pasien,
     k.tanggal_kunjungan
 FROM pemeriksaan_klinis p

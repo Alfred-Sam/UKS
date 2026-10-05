@@ -94,7 +94,11 @@ SELECT
     k.keluhan,
     k.tanggal_kunjungan,
     p.jenis_penyakit,
-    GROUP_CONCAT(o.nama_obat SEPARATOR ', ') as nama_obat,
+    GROUP_CONCAT(
+        IF(po.jumlah > 1, CONCAT(o.nama_obat, ' (', po.jumlah, ')'), o.nama_obat)
+        ORDER BY po.id ASC
+        SEPARATOR ', '
+    ) as nama_obat,
     p.catatan_admin,
     p.status_pasien
 FROM kunjungan k

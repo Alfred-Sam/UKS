@@ -51,7 +51,7 @@ $total_page = ceil($total_data / $limit);
 $data = $conn->query("
     SELECT o.id_obat, 
            o.nama_obat,
-           COALESCE(COUNT(po.id), 0) as value
+           COALESCE(SUM(po.jumlah), 0) as value
     FROM obat o
     LEFT JOIN pemeriksaan_obat po ON o.id_obat = po.id_obat
     WHERE o.nama_obat LIKE '%$search%'

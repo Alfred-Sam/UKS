@@ -38,14 +38,16 @@ if ($kunjungan) {
     if ($pemeriksaan) {
         // Ambil semua obat berdasarkan id_pemeriksaan lewat tabel relasi
         $obat_query = $conn->query("
-        SELECT o.nama_obat 
+        SELECT o.nama_obat, po.jumlah 
         FROM pemeriksaan_obat po
         JOIN obat o ON po.id_obat = o.id_obat
         WHERE po.id_pemeriksaan = '" . $pemeriksaan['id_pemeriksaan'] . "'
+        ORDER BY po.id ASC
         ");
 
         while ($obat_row = $obat_query->fetch_assoc()) {
-            $obat_list[] = $obat_row['nama_obat'];
+            $qty = intval($obat_row['jumlah'] ?? 1);
+            $obat_list[] = ($qty > 1) ? $obat_row['nama_obat'] . " ({$qty})" : $obat_row['nama_obat'];
         }
     }
 }

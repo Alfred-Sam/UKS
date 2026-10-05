@@ -1,7 +1,13 @@
 <?php
 $conn = new mysqli("localhost","root","","uks");
 
-$id = $_GET['id'];
+$id = intval($_GET['id'] ?? 0);
+
+// hapus dari pemeriksaan_obat (jika ada data pemeriksaan)
+$res_pemeriksaan = $conn->query("SELECT id_pemeriksaan FROM pemeriksaan_klinis WHERE id_kunjungan='$id'");
+while ($row = $res_pemeriksaan->fetch_assoc()) {
+    $conn->query("DELETE FROM pemeriksaan_obat WHERE id_pemeriksaan='" . $row['id_pemeriksaan'] . "'");
+}
 
 // hapus dari pemeriksaan klinis (kalau ada)
 $conn->query("DELETE FROM pemeriksaan_klinis WHERE id_kunjungan='$id'");
